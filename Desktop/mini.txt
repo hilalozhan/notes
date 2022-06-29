@@ -1,0 +1,170 @@
+ #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include<stdbool.h>
+ void search(char arr[500][100]);
+
+
+int main()
+{
+    int i=0,j=0,k=0,counter,a,b,count1=0,count2=0;
+   // char stdr[20],line[100];
+   // char ignoreList[213][20];
+   // char delim[]= " ";
+    //char *fileDelim;
+    //char fileStr[500][25];
+    //char alphabetic[500][25];
+   // char stdrExist[20];
+  //  char str[20];
+    
+    FILE*ignr;
+    
+    char stdr[50];
+    char ignoreList[500][100];
+    char str[20];
+
+    
+    ignr = fopen ( "D:\\ignoreList.txt", "r" );
+    
+    a=0;
+        while(b != EOF){ 
+            b = fscanf(ignr,"%s",stdr); 
+            strcpy(ignoreList[a],stdr);
+            a++;
+        }
+        fclose(ignr);
+        
+        
+    FILE* fptr;
+    char line[100];
+    char delim[]=" ";
+    char *fileDelim;
+    char fileStr[500][25];
+
+
+    
+   
+    printf ("Enter a File Name: ");
+    scanf ("%s", &stdr);
+    fptr = fopen (stdr, "r");
+    if (NULL== fptr){
+    	printf ("file cant be opened \n");
+	}
+	
+   while(fgets(line,sizeof(line),fptr)){
+        fileDelim = strlwr(strtok(line, delim));
+        while(fileDelim != NULL){
+            a=0;
+            for(i=0;i<500;i++){
+                
+                if(strcmp(fileDelim,ignoreList[i])==0){
+                    a++;    
+                }
+                if(a>0) break;
+            }     
+                if(a==0){
+                    strcpy(fileStr[j], fileDelim);
+                    j++;
+                    count1++;            
+                }
+            
+            fileDelim = strtok (NULL, delim);
+        }
+    }
+    fclose(fptr);
+   
+    
+    i=0,j=1,counter=1;
+    
+    
+    FILE* word;
+
+    
+    word= fopen("word.txt", "w");
+    
+       for(i=0;i<count1;i++)
+    {    counter=1;
+        for(j=i+1;j<count1;j++)
+        {    
+            if (strcmp(fileStr[i],fileStr[j])==0)
+            { 
+                counter++;
+            }    
+        }
+        
+        a=0;
+        for(k=0;k<i;k++)
+        {    if (strcmp(fileStr[i],fileStr[k])==0)
+            {    a++;
+            }
+        }
+        if(a==0){
+            if(strcmp(fileStr[i], "") !=0){
+            	 fprintf(word,"%s,%d\n",fileStr[i],counter); 
+            	 printf ("%s  %d\n",fileStr[i],counter);
+			}  
+			            
+        }       
+    } 
+    
+    fclose(word);
+    
+    
+    char alphabetic[500][25];
+    char stdrExist[20];
+
+
+       
+         
+      for(i = 0; i <count1; i++){
+        a=0;
+        for(j=0;j<i;j++)
+        {    if (strcmp(fileStr[j],fileStr[i])==0 || strcmp(fileStr[j],"")==0)
+            {    a++;
+            }
+        }
+        if(a==0)
+        {    if(fileStr[i]!= NULL){
+            strcpy (alphabetic[i],fileStr[i]);
+            count2++;
+            } 
+           }
+    }
+    
+	
+    for(i = 0; i < count1; i++){
+		for(j = i+1; j < count1; j++){
+			if(strcmp(alphabetic[i], alphabetic[j]) > 0){
+				strcpy(stdrExist, alphabetic[i]);
+				strcpy(alphabetic[i], alphabetic[j]);
+				strcpy(alphabetic[j], stdrExist);
+			}
+		}
+	}
+	search(fileStr);
+}
+
+void search(char arr[500][100]){
+	
+	char searchstr[100];
+    int i;
+	bool exist=false;
+     printf ("Enter a search string: ");
+     scanf("%s",&searchstr);
+     for(i=0;i<500;i++){
+     	 if(strcmp(searchstr,arr[i])==0){
+     	 exist=true;	
+	   }
+	 }
+	 if(exist==true){
+	 	printf("exist \n");
+	 }
+    
+	 else{
+	 	printf("it is not exist\n");
+	 }
+	 search(arr);
+     
+}
+      
+
